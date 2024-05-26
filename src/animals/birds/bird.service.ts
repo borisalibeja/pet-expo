@@ -1,9 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Bird } from 'src/animals.schema/birds.schema';
+import { Bird } from 'src/schema/birds.schema';
 import { CreateBirdDto, UpdateBirdDto } from './bird.dto';
-
 
 @Injectable()
 export class BirdService {
@@ -24,7 +23,9 @@ export class BirdService {
   }
 
   async update(id: number, updateBirdDto: UpdateBirdDto): Promise<Bird> {
-    const updatedBird = await this.birdModel.findByIdAndUpdate(id, updateBirdDto, { new: true }).exec();
+    const updatedBird = await this.birdModel
+      .findByIdAndUpdate(id, updateBirdDto, { new: true })
+      .exec();
     return updatedBird;
   }
 

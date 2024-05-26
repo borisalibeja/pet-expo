@@ -1,8 +1,17 @@
 // controllers/dog.controller.ts
-import { Controller, Get, Post, Body, Param, NotFoundException, Patch, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  NotFoundException,
+  Patch,
+  Delete,
+} from '@nestjs/common';
 import { DogService } from './dog.service';
 import { CreateDogDto, UpdateDogDto } from './dog.dto';
-import { Dog } from 'src/animals.schema/dogs.schema';
+import { Dog } from 'src/schema/dogs.schema';
 
 @Controller('dogs')
 export class DogController {
@@ -28,7 +37,10 @@ export class DogController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() updateDogDto: UpdateDogDto): Promise<Dog> {
+  async update(
+    @Param('id') id: number,
+    @Body() updateDogDto: UpdateDogDto,
+  ): Promise<Dog> {
     const updatedDog = await this.dogService.update(id, updateDogDto);
     if (!updatedDog) {
       throw new NotFoundException('Dog not found');

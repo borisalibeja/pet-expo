@@ -1,10 +1,9 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from 'mongoose'
+import {  Document } from 'mongoose'
 
-@Schema({ discriminatorKey: 'kind', collection: 'animals' })
+
+@Schema()
 export class Animal extends Document {
-    
-
     @Prop({required: true})
     name: string;
 
@@ -16,10 +15,10 @@ export class Animal extends Document {
 
     @Prop()
     image?: string;
-
 }
 
 export const AnimalSchema = SchemaFactory.createForClass(Animal);
+
 
 
 

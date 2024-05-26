@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Animal} from "./animals.schema";
 
 
-@Schema({ collection: 'animals' })
+@Schema( )
 export class Bird extends Animal {
 
     @Prop()
@@ -28,5 +28,5 @@ export class Bird extends Animal {
 }
 
 
-export const BirdSchema = SchemaFactory.createForClass(Bird).add({ kind: { type: String, default: 'Bird' } }as any);
+export const BirdSchema = SchemaFactory.createForClass(Bird);
 

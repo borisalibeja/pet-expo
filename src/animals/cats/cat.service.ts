@@ -2,8 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateCatDto, UpdateCatDto } from './cat.dto';
-import { Cat } from 'src/animals.schema/cats.schema';
-
+import { Cat } from 'src/schema/cats.schema';
 
 @Injectable()
 export class CatService {
@@ -24,7 +23,9 @@ export class CatService {
   }
 
   async update(id: number, updateCatDto: UpdateCatDto): Promise<Cat> {
-    const updatedCat = await this.catModel.findByIdAndUpdate(id, updateCatDto, { new: true }).exec();
+    const updatedCat = await this.catModel
+      .findByIdAndUpdate(id, updateCatDto, { new: true })
+      .exec();
     return updatedCat;
   }
 

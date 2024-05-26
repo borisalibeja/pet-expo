@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  NotFoundException,
+} from '@nestjs/common';
 import { CatService } from './cat.service';
 import { CreateCatDto, UpdateCatDto } from './cat.dto';
-import { Cat } from 'src/animals.schema/cats.schema';
+import { Cat } from 'src/schema/cats.schema';
 
 @Controller('cats')
 export class CatController {
@@ -27,7 +36,10 @@ export class CatController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() updateCatDto: UpdateCatDto): Promise<Cat> {
+  async update(
+    @Param('id') id: number,
+    @Body() updateCatDto: UpdateCatDto,
+  ): Promise<Cat> {
     const updatedCat = await this.catService.update(id, updateCatDto);
     if (!updatedCat) {
       throw new NotFoundException('Cat not found');

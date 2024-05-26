@@ -1,8 +1,16 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  NotFoundException,
+} from '@nestjs/common';
 import { BirdService } from './bird.service';
 import { CreateBirdDto, UpdateBirdDto } from './bird.dto';
-import { Bird } from 'src/animals.schema/birds.schema';
-
+import { Bird } from 'src/schema/birds.schema';
 
 @Controller('birds')
 export class BirdController {
@@ -28,7 +36,10 @@ export class BirdController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() updateBirdDto: UpdateBirdDto): Promise<Bird> {
+  async update(
+    @Param('id') id: number,
+    @Body() updateBirdDto: UpdateBirdDto,
+  ): Promise<Bird> {
     const updatedBird = await this.birdService.update(id, updateBirdDto);
     if (!updatedBird) {
       throw new NotFoundException('Bird not found');

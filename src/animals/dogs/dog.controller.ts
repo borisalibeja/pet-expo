@@ -8,10 +8,12 @@ import {
   NotFoundException,
   Patch,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { DogService } from './dog.service';
 import { CreateDogDto, UpdateDogDto } from './dog.dto';
 import { Dog } from 'src/schema/dogs.schema';
+import { Cat } from 'src/schema/cats.schema';
 
 @Controller('dogs')
 export class DogController {
@@ -23,8 +25,8 @@ export class DogController {
   }
 
   @Get()
-  async findAll(): Promise<Dog[]> {
-    return this.dogService.findAll();
+  async findAll(@Query('name') name: string): Promise<Dog[]> {
+    return this.dogService.findAll(name);
   }
 
   @Get(':id')
@@ -37,16 +39,9 @@ export class DogController {
   }
 
   @Patch(':id')
-  async update(
-    @Param('id') id: number,
-    @Body() updateDogDto: UpdateDogDto,
-  ): Promise<Dog> {
-    const updatedDog = await this.dogService.update(id, updateDogDto);
-    if (!updatedDog) {
-      throw new NotFoundException('Dog not found');
+    async patchBird(@Param('id') id: number, @Body() updateData: Partial<Dog>): Promise<Dog> {
+        return this.dogService.updateDog(id, updateData);
     }
-    return updatedDog;
-  }
 
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<void> {

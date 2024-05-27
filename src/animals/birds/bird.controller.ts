@@ -7,6 +7,7 @@ import {
   Param,
   Body,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import { BirdService } from './bird.service';
 import { CreateBirdDto, UpdateBirdDto } from './bird.dto';
@@ -22,8 +23,8 @@ export class BirdController {
   }
 
   @Get()
-  async findAll(): Promise<Bird[]> {
-    return this.birdService.findAll();
+  async findAll(@Query('name') name: string): Promise<Bird[]> {
+    return this.birdService.findAll(name);
   }
 
   @Get(':id')
@@ -36,16 +37,9 @@ export class BirdController {
   }
 
   @Patch(':id')
-  async update(
-    @Param('id') id: number,
-    @Body() updateBirdDto: UpdateBirdDto,
-  ): Promise<Bird> {
-    const updatedBird = await this.birdService.update(id, updateBirdDto);
-    if (!updatedBird) {
-      throw new NotFoundException('Bird not found');
+    async patchBird(@Param('id') id: number, @Body() updateData: Partial<Bird>): Promise<Bird> {
+        return this.birdService.updateBird(id, updateData);
     }
-    return updatedBird;
-  }
 
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<void> {

@@ -27,3 +27,15 @@ export class Dog extends Animal {
 
 export const DogSchema = SchemaFactory.createForClass(Dog);
 
+DogSchema.add(DogSchema);
+
+
+DogSchema.set('toObject', { virtuals: true });
+DogSchema.set('toJSON', {
+    virtuals: true,
+    transform: (ret) => {
+        ret._id = ret.id;
+        delete ret._id;
+        delete ret.__v;
+    }
+});

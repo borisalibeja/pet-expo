@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Animal} from "./animals.schema";
+import { Animal, AnimalSchema} from "./animals.schema";
+import mongoose from "mongoose";
 
 
 @Schema( )
@@ -30,3 +31,22 @@ export class Bird extends Animal {
 
 export const BirdSchema = SchemaFactory.createForClass(Bird);
 
+BirdSchema.add(AnimalSchema);
+
+BirdSchema.pre('save', function(next) {
+    if (!this._id) {
+        this._id = new mongoose.Types.ObjectId();
+    }
+    next();
+});
+
+
+BirdSchema.set('toObject', { virtuals: true });
+BirdSchema.set('toJSON', {
+    virtuals: true,
+    transform: (ret) => {
+        ret._id = ret.id;
+        delete ret._id;
+        delete ret.__v;
+    }
+});

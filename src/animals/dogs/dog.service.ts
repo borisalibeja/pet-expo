@@ -1,5 +1,5 @@
 // services/dog.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDogDto, UpdateDogDto } from './dog.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Dog } from 'src/schema/dogs.schema';
@@ -14,21 +14,25 @@ export class DogService {
     return createdDog.save();
   }
 
-  async findAll(): Promise<Dog[]> {
+  async findAll(name?: string): Promise<Dog[]> {
+    if (name) {
+      return this.dogModel.find({name: new RegExp(name, 'i')})
+    }
     return this.dogModel.find().exec();
   }
 
   async findOne(id: number): Promise<Dog> {
-    const dog = await this.dogModel.findById(id).exec();
+    const dog = await this.dogModel.findOne({id}).exec();
     return dog;
   }
 
-  async update(id: number, updateDogDto: UpdateDogDto): Promise<Dog> {
-    const updatedDog = await this.dogModel
-      .findByIdAndUpdate(id, updateDogDto, { new: true })
-      .exec();
-    return updatedDog;
-  }
+  async updateDog(id: number, updateData: Partial<Dog>): Promise<Dog> {
+    const dog = await this.dogModel.findOneAndUpdate({ id }, updateData, { new: true }).exec();
+    if (!dog) {
+        throw new NotFoundException(`Dog with id ${id} not found`);
+    }
+    return dog;
+}
 
   async remove(id: number): Promise<{ deletedCount?: number }> {
     const result = await this.dogModel.deleteOne({ id: id }).exec();

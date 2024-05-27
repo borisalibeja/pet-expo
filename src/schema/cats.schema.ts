@@ -18,3 +18,15 @@ export class Cat extends Animal {
 
 export const CatSchema = SchemaFactory.createForClass(Cat)
 
+CatSchema.add(CatSchema);
+
+
+CatSchema.set('toObject', { virtuals: true });
+CatSchema.set('toJSON', {
+    virtuals: true,
+    transform: (ret) => {
+        ret._id = ret.id;
+        delete ret._id;
+        delete ret.__v;
+    }
+});

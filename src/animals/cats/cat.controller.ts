@@ -7,6 +7,8 @@ import {
   Param,
   Body,
   NotFoundException,
+  Search,
+  Query,
 } from '@nestjs/common';
 import { CatService } from './cat.service';
 import { CreateCatDto, UpdateCatDto } from './cat.dto';
@@ -22,8 +24,8 @@ export class CatController {
   }
 
   @Get()
-  async findAll(): Promise<Cat[]> {
-    return this.catService.findAll();
+  async findAll(@Query('name') name: string): Promise<Cat[]> {
+    return this.catService.findAll(name);
   }
 
   @Get(':id')
@@ -36,16 +38,9 @@ export class CatController {
   }
 
   @Patch(':id')
-  async update(
-    @Param('id') id: number,
-    @Body() updateCatDto: UpdateCatDto,
-  ): Promise<Cat> {
-    const updatedCat = await this.catService.update(id, updateCatDto);
-    if (!updatedCat) {
-      throw new NotFoundException('Cat not found');
+    async patchBird(@Param('id') id: number, @Body() updateData: Partial<Cat>): Promise<Cat> {
+        return this.catService.updateCat(id, updateData);
     }
-    return updatedCat;
-  }
 
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<void> {
@@ -54,4 +49,6 @@ export class CatController {
       throw new NotFoundException('Cat not found');
     }
   }
+
+ 
 }

@@ -9,10 +9,12 @@ import { BirdController } from './birds/bird.controller';
 import { CatService } from './cats/cat.service';
 import { DogService } from './dogs/dog.service';
 import { BirdService } from './birds/bird.service';
+import { Animal, AnimalSchema } from 'src/schema/animals.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
+      {name: Animal.name, schema: AnimalSchema},
       { name: Cat.name, schema: CatSchema },
       { name: Dog.name, schema: DogSchema },
       { name: Bird.name, schema: BirdSchema },

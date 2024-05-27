@@ -2,9 +2,9 @@ import { IsNotEmpty } from "class-validator";
 
 export class CreateDogDto {
     @IsNotEmpty()
-    name: string;
-    @IsNotEmpty()
     id: number;
+    @IsNotEmpty()
+    name: string;
     description?: string;
     image?: string;
     breed_group?: string;

@@ -13,21 +13,25 @@ export class BirdService {
     return createdBird.save();
   }
 
-  async findAll(): Promise<Bird[]> {
+  async findAll(name?: string): Promise<Bird[]> {
+    if (name) {
+      return this.birdModel.find({name: new RegExp(name, 'i')})
+    }
     return this.birdModel.find().exec();
   }
 
   async findOne(id: number): Promise<Bird> {
-    const bird = await this.birdModel.findById(id).exec();
+    const bird = await this.birdModel.findOne({id}).exec();
     return bird;
   }
 
-  async update(id: number, updateBirdDto: UpdateBirdDto): Promise<Bird> {
-    const updatedBird = await this.birdModel
-      .findByIdAndUpdate(id, updateBirdDto, { new: true })
-      .exec();
-    return updatedBird;
-  }
+  async updateBird(id: number, updateData: Partial<Bird>): Promise<Bird> {
+    const bird = await this.birdModel.findOneAndUpdate({ id }, updateData, { new: true }).exec();
+    if (!bird) {
+        throw new NotFoundException(`Bird with id ${id} not found`);
+    }
+    return bird;
+}
 
   async remove(id: number): Promise<{ deletedCount?: number }> {
     const result = await this.birdModel.deleteOne({ id: id }).exec();
